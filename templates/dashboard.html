@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <header class="mb-8 flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-slate-950/50 backdrop-blur md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm font-medium uppercase tracking-[0.3em] text-emerald-400">Shop Inventory & Debt Tracker</p>
+                <h1 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Dashboard</h1>
+                <p class="mt-2 max-w-2xl text-sm text-slate-300">Track today's sales, outstanding debt, and low-stock products from one simple view.</p>
+            </div>
+            <nav class="flex flex-wrap gap-3 text-sm font-medium">
+                <a href="/" class="rounded-full bg-emerald-500 px-4 py-2 text-slate-950 transition hover:bg-emerald-400">Dashboard</a>
+                <a href="/products" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Products</a>
+                <a href="/sales" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Sales</a>
+                <a href="/debts" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Debts</a>
+            </nav>
+        </header>
+
+        <main class="space-y-6">
+            <section class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                <article class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/30">
+                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Today's sales</p>
+                    <div class="mt-3 text-4xl font-bold text-emerald-400">₦{{ "{:.2f}"|format(today_total_sales) }}</div>
+                    <p class="mt-2 text-sm text-slate-400">Total sales recorded today.</p>
+                </article>
+
+                <article class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/30">
+                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Outstanding debt</p>
+                    <div class="mt-3 text-4xl font-bold text-amber-400">₦{{ "{:.2f}"|format(total_outstanding_debt) }}</div>
+                    <p class="mt-2 text-sm text-slate-400">All unpaid balances currently on record.</p>
+                </article>
+
+                <article class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/30 md:col-span-2 xl:col-span-1">
+                    <p class="text-sm uppercase tracking-[0.25em] text-slate-400">Low stock</p>
+                    <div class="mt-3 text-4xl font-bold text-sky-400">{{ low_stock_products|length }}</div>
+                    <p class="mt-2 text-sm text-slate-400">Products with fewer than 5 units left.</p>
+                </article>
+            </section>
+
+            <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/30">
+                <div class="mb-5 flex items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-xl font-semibold text-white">Low Stock Alerts</h2>
+                        <p class="mt-1 text-sm text-slate-400">Review items before they run out.</p>
+                    </div>
+                    <a href="/products" class="text-sm font-medium text-emerald-400 transition hover:text-emerald-300">Manage products</a>
+                </div>
+
+                {% if low_stock_products %}
+                <div class="overflow-hidden rounded-2xl border border-slate-800">
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-slate-800 text-left text-sm">
+                            <thead class="bg-slate-950/60 text-slate-300">
+                                <tr>
+                                    <th class="px-4 py-3 font-medium">Product</th>
+                                    <th class="px-4 py-3 font-medium">Stock</th>
+                                    <th class="px-4 py-3 font-medium">Price</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-800 bg-slate-900">
+                                {% for product in low_stock_products %}
+                                <tr class="hover:bg-slate-800/60">
+                                    <td class="px-4 py-3 text-white">{{ product['name'] }}</td>
+                                    <td class="px-4 py-3">
+                                        <span class="inline-flex rounded-full bg-rose-500/15 px-3 py-1 text-xs font-semibold text-rose-300">{{ product['stock_quantity'] }}</span>
+                                    </td>
+                                    <td class="px-4 py-3 text-slate-300">₦{{ "{:.2f}"|format(product['price']) }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% else %}
+                <div class="rounded-2xl border border-dashed border-slate-700 bg-slate-950/50 p-8 text-center text-slate-400">
+                    No products are below the 5-unit threshold.
+                </div>
+                {% endif %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>
