@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-100">
+    <div class="mx-auto max-w-3xl px-4 py-6 sm:px-6 lg:px-8">
+        <header class="mb-8 flex flex-col gap-4 rounded-3xl border border-slate-800 bg-slate-900/80 p-6 shadow-2xl shadow-slate-950/50 backdrop-blur md:flex-row md:items-center md:justify-between">
+            <div>
+                <p class="text-sm font-medium uppercase tracking-[0.3em] text-emerald-400">Shop Inventory & Debt Tracker</p>
+                <h1 class="mt-2 text-3xl font-bold tracking-tight text-white sm:text-4xl">Edit Product</h1>
+                <p class="mt-2 max-w-2xl text-sm text-slate-300">Update the product name, price, or stock quantity.</p>
+            </div>
+            <nav class="flex flex-wrap gap-3 text-sm font-medium">
+                <a href="/" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Dashboard</a>
+                <a href="/products" class="rounded-full bg-emerald-500 px-4 py-2 text-slate-950 transition hover:bg-emerald-400">Products</a>
+                <a href="/sales" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Sales</a>
+                <a href="/debts" class="rounded-full border border-slate-700 px-4 py-2 text-slate-200 transition hover:border-emerald-500 hover:text-white">Debts</a>
+            </nav>
+        </header>
+
+        <section class="rounded-3xl border border-slate-800 bg-slate-900 p-6 shadow-lg shadow-slate-950/30">
+            {% if error %}
+            <div class="mb-5 rounded-2xl border border-rose-500/40 bg-rose-500/10 px-4 py-3 text-sm text-rose-200">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form action="/products/{{ product['id'] }}/edit" method="post" class="space-y-5">
+                <div>
+                    <label for="name" class="mb-2 block text-sm font-medium text-slate-300">Product Name</label>
+                    <input id="name" name="name" type="text" value="{{ product['name'] }}" required class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-500">
+                </div>
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="price" class="mb-2 block text-sm font-medium text-slate-300">Price</label>
+                        <input id="price" name="price" type="number" step="0.01" min="0" value="{{ product['price'] }}" required class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-500">
+                    </div>
+                    <div>
+                        <label for="stock_quantity" class="mb-2 block text-sm font-medium text-slate-300">Stock</label>
+                        <input id="stock_quantity" name="stock_quantity" type="number" step="1" min="0" value="{{ product['stock_quantity'] }}" required class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition placeholder:text-slate-500 focus:border-emerald-500">
+                    </div>
+                </div>
+                <div class="flex flex-col gap-3 sm:flex-row">
+                    <button type="submit" class="rounded-2xl bg-emerald-500 px-4 py-3 font-semibold text-slate-950 transition hover:bg-emerald-400">Update Product</button>
+                    <a href="/products" class="rounded-2xl border border-slate-700 px-4 py-3 text-center font-semibold text-slate-200 transition hover:border-emerald-500 hover:text-white">Cancel</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</body>
+</html>
